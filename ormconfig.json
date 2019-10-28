@@ -3,7 +3,7 @@
    "host": "localhost",
    "port": 5432,
    "database": "querybuilder_development",
-   "synchronize": false,
+   "synchronize": true,
    "logging": "all",
    "entities": [
       "server/entity/**/*.ts"

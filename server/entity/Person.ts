@@ -1,26 +1,22 @@
 import { Entity, PrimaryGeneratedColumn, UpdateDateColumn, CreateDateColumn, ManyToOne, JoinColumn, Column as DBColumn } from "typeorm";
 import { Field as APIField, ID, ObjectType } from "type-graphql";
 
-import { Form } from "./Form";
+import { Company } from "./Company";
 
-@Entity({ name: "fields" })
+@Entity({ name: "people" })
 @ObjectType()
-export class Field {
+export class Person {
   @APIField(type => ID)
   @PrimaryGeneratedColumn()
   id: number;
 
   @APIField()
-  @DBColumn({ default: "TextField"})
-  type: string;
-
-  @APIField({ nullable: true })
-  @DBColumn({ nullable: true })
-  data_source: string;
+  @DBColumn()
+  first_name: string;
 
   @APIField()
   @DBColumn()
-  column_name: string;
+  last_name: string;
 
   @CreateDateColumn()
   created_at: Date;
@@ -28,7 +24,7 @@ export class Field {
   @UpdateDateColumn()
   updated_at: Date;
 
-  @ManyToOne(type => Form, form => form.fields)
-  @JoinColumn({ name: "form_id" })
-  form: Form;
+  @ManyToOne(type => Company, company => company.people)
+  @JoinColumn({ name: "company_id" })
+  company: Company;
 }

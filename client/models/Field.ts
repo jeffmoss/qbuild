@@ -6,12 +6,13 @@ import { AppStore } from "./AppStore";
 export class Field extends AppModel {
   name: string;
   column_name: string
-  column_default: any;
-  input_type: string;
+  column_default: string;
+  data_source: string;
+  type: string;
 
-  constructor({name, column_name, form_id}: {name?: string, column_name?: string, form_id?: number}) {
+  constructor({name, column_name, data_source, type, form_id}: {name?: string, column_name?: string, data_source?: string, type: string, form_id?: number}) {
     super()
-    Object.assign(this, { name, column_name, form_id });
+    Object.assign(this, { name, column_name, data_source, type, form_id });
   }
 }
 
@@ -20,7 +21,9 @@ export class FieldStore extends AppStore {
     const query = `{
       fields(form_id: "${form_id}") {
         column_name
+        type
         name
+        data_source
       }
     }`;
     const data = await request('http://localhost:4000/graphql', query);

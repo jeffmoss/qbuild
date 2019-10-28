@@ -1,11 +1,11 @@
 import { Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, Column, OneToMany } from "typeorm";
 import { Field as APIField, ID, ObjectType } from "type-graphql";
 
-import { Field } from "./Field";
+import { Person } from "./Person";
 
-@Entity({ name: "forms" })
+@Entity({ name: "companies" })
 @ObjectType()
-export class Form {
+export class Company {
   @APIField(type => ID)
   @PrimaryGeneratedColumn()
   id: number;
@@ -14,16 +14,12 @@ export class Form {
   @Column()
   name: string;
 
-  @APIField()
-  @Column()
-  table_name: string;
-
   @CreateDateColumn()
   created_at: Date;
 
   @UpdateDateColumn()
   updated_at: Date;
 
-  @OneToMany(type => Field, field => field.form)
-  fields: Field[];
+  @OneToMany(type => Person, person => person.company)
+  people: Person[];
 }

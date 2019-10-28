@@ -23,6 +23,7 @@ export class Form extends AppModel {
           id
           type
           column_name
+          data_source
         }
       }
     }`;

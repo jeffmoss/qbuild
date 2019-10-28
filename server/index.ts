@@ -6,9 +6,12 @@ import { Container } from "typedi";
 import * as TypeORM from "typeorm";
 import * as TypeGraphQL from "type-graphql";
 
+import { seedDatabase } from "./entity";
+
 import { TableResolver } from "./resolver/TableResolver";
 import { ColumnResolver } from "./resolver/ColumnResolver";
 import { FormResolver } from "./resolver/FormResolver";
+import { CompanyResolver } from "./resolver/CompanyResolver";
 
 export interface Context {
   // user: User;
@@ -23,11 +26,11 @@ async function bootstrap() {
     await TypeORM.createConnection();
 
     // seed database with some data
-    // const { defaultUser } = await seedDatabase();
+    const objects = await seedDatabase();
 
     // build TypeGraphQL executable schema
     const schema = await TypeGraphQL.buildSchema({
-      resolvers: [ColumnResolver, TableResolver, FormResolver],
+      resolvers: [ColumnResolver, CompanyResolver, TableResolver, FormResolver],
       container: Container,
     });
 
