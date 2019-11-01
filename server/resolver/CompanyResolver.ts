@@ -1,9 +1,11 @@
-import { Resolver, FieldResolver, Query, Arg, Root } from "type-graphql";
+import { Arg, FieldResolver, Mutation, Query, Resolver, Root, Ctx } from "type-graphql";
 import { Repository } from "typeorm";
 import { InjectRepository } from "typeorm-typedi-extensions";
 
-import { Company } from "../entity/Company";
+import { Company, CompanyInput } from "../entity/Company";
 import { Person } from "../entity/Person";
+
+import { Context } from "../index";
 
 @Resolver(of => Company)
 export class CompanyResolver {
@@ -27,5 +29,14 @@ export class CompanyResolver {
     return this.personRepository.find({
       where: { company_id: company.id },
     });
+  }
+
+  // Create
+  @Mutation(type => Company)
+  async addCompany(@Arg("company") companyData: CompanyInput, @Ctx() ctx: Context): Promise<Company> {
+    const company = new Company();
+    company.name = companyData.name;
+    await this.companyRepository.save(company);
+    return company;
   }
 }

@@ -1,7 +1,13 @@
 import { Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, Column, OneToMany } from "typeorm";
-import { Field as APIField, ID, ObjectType } from "type-graphql";
+import { Field as APIField, ID, ObjectType, InputType } from "type-graphql";
 
 import { Person } from "./Person";
+
+@InputType()
+export class CompanyInput implements Partial<Company> {
+  @APIField()
+  name: string;
+}
 
 @Entity({ name: "companies" })
 @ObjectType()

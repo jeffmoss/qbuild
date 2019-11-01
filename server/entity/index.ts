@@ -32,8 +32,8 @@ export async function seedDatabase() {
   await formRepository.save([form1]);
 
   const fields = fieldRepository.create([
-    { form: form1, type: "TextField", column_name: "first_name" },
-    { form: form1, type: "TextField", column_name: "last_name" },
+    { form: form1, type: "Text", column_name: "first_name" },
+    { form: form1, type: "Text", column_name: "last_name" },
     { form: form1, type: "Association", data_source: "CompanyStore", column_name: "company_id" },
   ]);
   await fieldRepository.save(fields);

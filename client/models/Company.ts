@@ -43,4 +43,17 @@ export class CompanyStore extends AppStore {
     const data = await request('http://localhost:4000/graphql', query);
     this.records = data.companies.map((company: any) => new Company(company));
   }
+
+  async create({ name }: { name: string }) {
+    const query = `mutation {
+      addCompany(company: {
+        name: "${name}"
+      }) {
+        id
+        name
+      }
+    }`;
+    const data = await request('http://localhost:4000/graphql', query);
+    this.records.push(new Company(data.addCompany));
+  }
 }

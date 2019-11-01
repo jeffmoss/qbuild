@@ -3,9 +3,10 @@ import { Link } from 'react-router-dom';
 import { observer } from "mobx-react";
 import { fromPromise, IPromiseBasedObservable } from "mobx-utils";
 
-import TextField from '@material-ui/core/TextField';
-import Select from '@material-ui/core/Select';
+import Typography from '@material-ui/core/Typography';
+
 import { Association } from "../field/Association";
+import { Text } from "../field/Text";
 
 import { Form } from "../../models/Form";
 import { Field } from "../../models/Field";
@@ -15,8 +16,7 @@ export interface FormViewProps {
 }
 
 const componentMap : { [key: string]: React.ComponentType } = {
-  TextField,
-  Select,
+  Text,
   Association,
 }
 
@@ -51,9 +51,9 @@ export class FormView extends React.Component<FormViewProps, {}> {
     const { name, table_name, fields } = this.form.value;
     return (
       <nav className="panel">
-        <p className="panel-heading">
+        <Typography variant="h5" gutterBottom>
           {name} ({table_name})
-        </p>
+        </Typography>
         {fields.map(this.renderFieldComponent)}
       </nav>
     )

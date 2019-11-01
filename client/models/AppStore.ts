@@ -8,4 +8,6 @@ export class AppStore {
   }
 
   load(...args: any[]): void { return; };
+
+  create(values: any): any { return; };
 }

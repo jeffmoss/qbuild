@@ -9,7 +9,6 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import MenuIcon from '@material-ui/icons/Menu';
-import Typography from '@material-ui/core/Typography';
 
 import { TopMenu } from "../TopMenu";
 import { FormView, FormViewProps } from './View';
@@ -24,14 +23,13 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
     },
     drawer: {
-      [theme.breakpoints.up('sm')]: {
-        width: drawerWidth,
-        flexShrink: 0,
-      },
+      width: drawerWidth,
+      flexShrink: 0,
     },
     drawerPaper: {
       width: drawerWidth,
     },
+    toolbar: theme.mixins.toolbar,
     content: {
       flexGrow: 1,
       padding: theme.spacing(3),
@@ -49,8 +47,15 @@ export const FormLayout: React.SFC<FormLayoutProps> = observer((props) => {
   const classes = useStyles(props);
 
   return (
-    <div>
+    <div className={classes.root}>
       <TopMenu />
+      <main className={classes.content}>
+        <div className={classes.toolbar} />
+        <Switch>
+          <Route path="/build/forms/:id"
+                 render={( {match}: FormViewMatchProps) => (<FormView id={match.params.id} />)} />
+        </Switch>
+      </main>
       <nav className={classes.drawer} aria-label="forms">
         <Drawer
           classes={{
@@ -69,25 +74,6 @@ export const FormLayout: React.SFC<FormLayoutProps> = observer((props) => {
           </List>
         </Drawer>
       </nav>
-
-      <main className={classes.content}>
-        <Typography paragraph>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-          ut labore et dolore magna aliqua. Rhoncus dolor purus non enim praesent elementum
-          facilisis leo vel. Risus at ultrices mi tempus imperdiet. Semper risus in hendrerit
-          gravida rutrum quisque non tellus. Convallis convallis tellus id interdum velit laoreet id
-          donec ultrices. Odio morbi quis commodo odio aenean sed adipiscing. Amet nisl suscipit
-          adipiscing bibendum est ultricies integer quis. Cursus euismod quis viverra nibh cras.
-          Metus vulputate eu scelerisque felis imperdiet proin fermentum leo. Mauris commodo quis
-          imperdiet massa tincidunt. Cras tincidunt lobortis feugiat vivamus at augue. At augue eget
-          arcu dictum varius duis at consectetur lorem. Velit sed ullamcorper morbi tincidunt. Lorem
-          donec massa sapien faucibus et molestie ac.
-        </Typography>
-        <Switch>
-          <Route path="/build/forms/:id"
-                 render={( {match}: FormViewMatchProps) => (<FormView id={match.params.id} />)} />
-        </Switch>
-      </main>
     </div>
   )
 })
