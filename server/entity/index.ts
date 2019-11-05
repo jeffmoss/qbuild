@@ -31,12 +31,23 @@ export async function seedDatabase() {
   form1.name = "People Form";
   await formRepository.save([form1]);
 
-  const fields = fieldRepository.create([
+  const fields1 = fieldRepository.create([
     { form: form1, type: "Text", column_name: "first_name" },
     { form: form1, type: "Text", column_name: "last_name" },
     { form: form1, type: "Association", data_source: "CompanyStore", column_name: "company_id" },
+    { form: form1, type: "Association", data_source: "PersonStore", column_name: "doctor_id" },
   ]);
-  await fieldRepository.save(fields);
+  await fieldRepository.save(fields1);
+
+  const form2 = new Form();
+  form2.table_name = "companies";
+  form2.name = "Company Form";
+  await formRepository.save([form2]);
+
+  const fields2 = fieldRepository.create([
+    { form: form2, type: "Text", column_name: "name" },
+  ]);
+  await fieldRepository.save(fields2);
 
   return {
     // defaultUser,

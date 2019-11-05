@@ -1,4 +1,13 @@
-import { Entity, PrimaryGeneratedColumn, UpdateDateColumn, CreateDateColumn, ManyToOne, JoinColumn, Column as DBColumn } from "typeorm";
+import {
+  Column as DBColumn,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from "typeorm";
 import { Field as APIField, ID, ObjectType } from "type-graphql";
 
 import { Company } from "./Company";
@@ -27,4 +36,11 @@ export class Person {
   @ManyToOne(type => Company, company => company.people)
   @JoinColumn({ name: "company_id" })
   company: Company;
+
+  @ManyToOne(type => Person, doctor => doctor.patients)
+  @JoinColumn({ name: "doctor_id" })
+  doctor: Person;
+
+  @OneToMany(type => Person, person => person.doctor)
+  patients: Person[];
 }

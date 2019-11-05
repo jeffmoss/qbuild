@@ -3,27 +3,24 @@ import { Link } from "react-router-dom";
 import { observer } from "mobx-react";
 import { fromPromise, IPromiseBasedObservable } from "mobx-utils";
 
-import * as Models from '../../models';
+import { Field } from '../../models/Field';
 
 import Box from '@material-ui/core/Box';
 
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-
+import Button from '@material-ui/core/Button';
 import InputLabel from "@material-ui/core/InputLabel";
 import FormControl from "@material-ui/core/FormControl";
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from "@material-ui/core/Select";
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
+
+import { FormView } from '../form/View';
 
 export interface AssociationProps {
   name: string;
   data_source: string;
   value: number;
+  formView: FormView;
+  field: Field;
 }
 
 export interface OptionInterface {
@@ -31,26 +28,18 @@ export interface OptionInterface {
   name: string;
 }
 
-// TODO: This ought to be coming from an "App" model, app-specific stores only.
-const storeMap : { [key: string]: any } = {
-  "CompanyStore": Models.CompanyStore,
-}
-
 @observer
-export class Association extends React.Component<AssociationProps, { value: number, companyName: string, editing: boolean }> {
+export class Association extends React.Component<AssociationProps, { value: number }> {
   public static defaultProps = { value: "" };
 
-  private store: Models.AppStore;
+  private field: Field;
   private value: number;
 
   constructor(props: AssociationProps) {
     super(props);
     this.state = {
       value: this.props.value,
-      editing: false,
-      companyName: "",
     };
-    this.store = new storeMap[props.data_source]();
   }
 
   selectOption(record: OptionInterface, i: number) {
@@ -63,28 +52,12 @@ export class Association extends React.Component<AssociationProps, { value: numb
     this.setState({ value: event.target.value });
   }
 
-  editOpen = () => {
-    this.setState({ editing: true });
-  }
-
-  editClose = () => {
-    this.setState({ editing: false });
-  }
-
-  doEdit = (event: React.ChangeEvent<{ value: string }>) => {
-    this.setState({ companyName: event.target.value });
-  }
-
-  editSubmit = () => {
-    this.store.create({ name: this.state.companyName });
-  }
-
   render() {
-    const { records } = this.store;
+    const { records } = this.props.field.store;
     return (
       <Box display="flex" p={1} bgcolor="background.paper">
         <Box p={1} flexGrow={1}>
-          <FormControl variant="standard" fullWidth={true}>
+          <FormControl variant="standard" fullWidth>
             <InputLabel htmlFor="filled-age-simple">{this.props.name}</InputLabel>
             <Select
               value={this.state.value}
@@ -100,34 +73,9 @@ export class Association extends React.Component<AssociationProps, { value: numb
           </FormControl>
         </Box>
         <Box p={1}>
-          <Button variant="outlined" size="large" color="primary" onClick={this.editOpen}>
+          <Button variant="outlined" size="large" color="primary" onClick={(e) => this.props.formView.edit(this.props.field)}>
             Edit
           </Button>
-          <Dialog open={this.state.editing} onClose={this.editClose} aria-labelledby="form-dialog-title">
-            <DialogTitle id="form-dialog-title">New Option</DialogTitle>
-            <DialogContent>
-              <DialogContentText>
-                Add a new record to the dropdown.
-              </DialogContentText>
-              <TextField
-                autoFocus
-                margin="dense"
-                id="name"
-                label="Company"
-                type="text"
-                fullWidth
-                onChange={this.doEdit}
-              />
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={this.editClose} color="primary">
-                Cancel
-              </Button>
-              <Button onClick={this.editSubmit} color="primary">
-                Save
-              </Button>
-            </DialogActions>
-          </Dialog>
         </Box>
       </Box>
     )

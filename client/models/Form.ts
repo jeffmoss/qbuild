@@ -10,7 +10,12 @@ export class Form extends AppModel {
 
   constructor({name, table_name, id, fields}: {name?: string, table_name?: string, id?: number, fields?: Field[]}) {
     super()
-    Object.assign(this, { name, table_name, id, fields });
+    Object.assign(this, {
+      name,
+      table_name,
+      id,
+      fields: fields ? fields.map((field: any) => new Field(field)) : []
+    });
   }
 
   static async find(id: string) {

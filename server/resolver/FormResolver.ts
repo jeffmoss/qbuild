@@ -24,8 +24,9 @@ export class FormResolver {
 
   @FieldResolver(type => [Field])
   fields(@Root() form: Form): Promise<Field[]> {
+    console.log(form.id);
     return this.fieldRepository.find({
-      where: { form_id: form.id },
+      where: { form: form },
     });
   }
 }
